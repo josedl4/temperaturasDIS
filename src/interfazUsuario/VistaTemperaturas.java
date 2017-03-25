@@ -30,7 +30,7 @@ public class VistaTemperaturas extends javax.swing.JDialog {
             jLabelValorMin. setText("no hay registro");
         }
         else {
-            jLabelValorMin.setText(minima.toString());
+            jLabelValorMin.setText(minima.getValor() + " ");
         }
     }
     
@@ -39,7 +39,7 @@ public class VistaTemperaturas extends javax.swing.JDialog {
             jLabelValorMax. setText("no hay registro");
         }
         else {
-            jLabelValorMax.setText(maxima.toString());
+            jLabelValorMax.setText(maxima.getValor() + " ");
         }
     }
     
@@ -49,7 +49,7 @@ public class VistaTemperaturas extends javax.swing.JDialog {
             jLabelValorMedio.setText("no hay registro");
         }
         else {
-            jLabelValorMedio.setText(media.toString());
+            jLabelValorMedio.setText(media.getValor() + " ");
         }
     }
 

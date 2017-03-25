@@ -11,9 +11,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 /**
@@ -46,22 +43,23 @@ public class DataBaseInterface {
         }
     }
     
-    public void addTemperature (LocalDate ld, double temp) throws SQLException {
+    public void addTemperature (Momento moment, double temp) throws SQLException {
         String t = Double.toString(temp);
-        String d = "'" + ld.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "'" ;
-        System.out.println(stat);
-        stat.execute("INSERT INTO temperaturas VALUES ( " + t + ", " + d + ")");
+                
+        stat.execute("INSERT INTO temperaturas VALUES ( " + t + ", " + "'" 
+                + moment.toString() + "'" + ")");
     }
     
     
-    public HashMap<LocalDate, Temperatura> getData() throws SQLException {
-        HashMap<LocalDate, Temperatura> result = new HashMap<LocalDate,Temperatura>();
+    public HashMap<Momento, Temperatura> getData() throws SQLException {
+        HashMap<Momento, Temperatura> result = new HashMap<Momento,Temperatura>();
         
         ResultSet query = stat.executeQuery("SELECT * FROM temperaturas");
         while(query.next()){
             float temp = (float) query.getObject(1);
             Date d = (Date) query.getObject(2);
-            result.put( d.toLocalDate(), new Temperatura(temp));
+            Momento m = new Momento(d);
+            result.put( m, new Temperatura(temp));
         }
         
         return result;

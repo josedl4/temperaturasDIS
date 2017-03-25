@@ -5,7 +5,7 @@
  */
 package interfazUsuario;
 
-import java.time.LocalDate;
+import modelo.Momento;
 import modelo.Registro;
 import modelo.Temperatura;
 
@@ -41,7 +41,7 @@ public class ControladorVistaRegistro {
     public void guardarTemperatura() { 
         Temperatura temp = new Temperatura(t);
         
-        Registro.getRegistro().addTemperatura(temp, LocalDate.now());
+        Registro.getRegistro().addTemperatura(temp, new Momento());
         vista.cerrarConfirmacion();
         vista.muestraTemperaturas();
     }

@@ -6,12 +6,9 @@
 package modelo;
 
 import java.sql.SQLException;
-import java.time.Clock;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,15 +17,15 @@ import java.util.logging.Logger;
 public class Registro {
     
     private String nombre;
-    private LocalDate fechaInicio;
+    private Momento fechaInicio;
     private ArrayList<Temperatura> listaTemperaturas;
-    private HashMap<LocalDate,Temperatura> mapa;
+    private HashMap<Momento,Temperatura> mapa;
     private Temperatura temperaturaMinima, temperaturaMaxima;
     private DataBaseInterface db;
     
     private static Registro registro;
 
-    private Registro(String nombre, LocalDate fechaInicio) {
+    private Registro(String nombre, Momento fechaInicio) {
         db = new DataBaseInterface();
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
@@ -40,7 +37,7 @@ public class Registro {
     
     public static Registro getRegistro(){
         if(registro == null){
-            registro = new Registro("El único", LocalDate.now());
+            registro = new Registro("El único", new Momento());
         }
         
         return registro;
@@ -50,7 +47,7 @@ public class Registro {
         return nombre;
     }
 
-    public LocalDate getFechaInicio() {
+    public Momento getFechaInicio() {
         return fechaInicio;
     }
      
@@ -58,7 +55,7 @@ public class Registro {
         this.nombre = nombre;
     }
 
-    protected void setFechaInicio(LocalDate fechaInicio) {
+    protected void setFechaInicio(Momento fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
@@ -66,8 +63,8 @@ public class Registro {
         return  (ArrayList<Temperatura>) listaTemperaturas.clone();
     }
 
-    public HashMap<LocalDate, Temperatura> getRegistroTemperaturaAsMap() {
-        return (HashMap<LocalDate, Temperatura>) mapa.clone();
+    public HashMap<Date, Temperatura> getRegistroTemperaturaAsMap() {
+        return (HashMap<Date, Temperatura>) mapa.clone();
     }
 
     public Temperatura getTemperaturaMedia() {
@@ -94,16 +91,16 @@ public class Registro {
         return temperaturaMaxima;
     }
     
-    public void addTemperatura(Temperatura nuevaTemperatura, LocalDate momento){
+    public void addTemperatura(Temperatura nuevaTemperatura, Momento moment){
         if (listaTemperaturas.isEmpty()) {
             temperaturaMinima = nuevaTemperatura;
             temperaturaMaxima = nuevaTemperatura;
         }
         
         listaTemperaturas.add(nuevaTemperatura);
-        updateTemperature(momento, nuevaTemperatura.getValor());
+        updateTemperature(moment, nuevaTemperatura.getValor());
         
-        mapa.put(momento, nuevaTemperatura);
+        mapa.put(moment, nuevaTemperatura);
         
         if (nuevaTemperatura.getValor() < temperaturaMinima.getValor()) {
             temperaturaMinima = nuevaTemperatura;
@@ -135,9 +132,9 @@ public class Registro {
         }
     }
     
-    private void updateTemperature(LocalDate ld,float temp){
+    private void updateTemperature(Momento moment,float temp){
         try {
-            db.addTemperature(ld, temp);
+            db.addTemperature(moment, temp);
         } catch (SQLException ex) {
             System.err.println(ex);
         }
