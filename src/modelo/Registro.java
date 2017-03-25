@@ -5,9 +5,13 @@
  */
 package modelo;
 
+import java.sql.SQLException;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,14 +24,18 @@ public class Registro {
     private ArrayList<Temperatura> listaTemperaturas;
     private HashMap<LocalDate,Temperatura> mapa;
     private Temperatura temperaturaMinima, temperaturaMaxima;
+    private DataBaseInterface db;
     
     private static Registro registro;
 
     private Registro(String nombre, LocalDate fechaInicio) {
+        db = new DataBaseInterface();
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
         listaTemperaturas = new ArrayList<>();
         mapa = new HashMap<>();
+        
+        loadTemperatures();
     }
     
     public static Registro getRegistro(){
@@ -91,19 +99,48 @@ public class Registro {
             temperaturaMinima = nuevaTemperatura;
             temperaturaMaxima = nuevaTemperatura;
         }
+        
         listaTemperaturas.add(nuevaTemperatura);
+        updateTemperature(momento, nuevaTemperatura.getValor());
+        
         mapa.put(momento, nuevaTemperatura);
+        
         if (nuevaTemperatura.getValor() < temperaturaMinima.getValor()) {
             temperaturaMinima = nuevaTemperatura;
         }
+        
         if (nuevaTemperatura.getValor() > temperaturaMaxima.getValor()) {
             temperaturaMaxima = nuevaTemperatura;
         }
     }
     
+    private void loadTemperatures(){
+        try {
+            mapa = db.getData();
+            listaTemperaturas = new ArrayList<Temperatura>(mapa.values());
+            
+            if(!listaTemperaturas.isEmpty()){
+                temperaturaMaxima = listaTemperaturas.get(0);
+                temperaturaMinima = listaTemperaturas.get(0);
+                for (Temperatura t : listaTemperaturas){
+                    if(t.getValor() < temperaturaMinima.getValor())
+                        temperaturaMinima = t;
+                    if(t.getValor() > temperaturaMaxima.getValor())
+                        temperaturaMaxima = t;
+                }
+            }
+                  
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
     
-    
-    
-    
+    private void updateTemperature(LocalDate ld,float temp){
+        try {
+            db.addTemperature(ld, temp);
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+    }
     
 }

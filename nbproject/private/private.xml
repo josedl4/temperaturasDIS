@@ -6,7 +6,7 @@
             <file>file:/home/joselm/git/temperaturasDIS/src/modelo/Temperatura.java</file>
             <file>file:/home/joselm/git/temperaturasDIS/src/main/Main.java</file>
             <file>file:/home/joselm/git/temperaturasDIS/src/interfazUsuario/ControladorVistaRegistro.java</file>
-            <file>file:/home/joselm/git/temperaturasDIS/src/interfazUsuario/VistaTemperaturas.java</file>
+            <file>file:/home/joselm/git/temperaturasDIS/src/modelo/DataBaseInterface.java</file>
             <file>file:/home/joselm/git/temperaturasDIS/src/interfazUsuario/VistaRegistro.java</file>
             <file>file:/home/joselm/git/temperaturasDIS/src/modelo/Registro.java</file>
         </group>
