@@ -6,15 +6,8 @@
 package interfazUsuario;
 
 import java.awt.Color;
-import java.awt.MouseInfo;
-import java.awt.PointerInfo;
-import javax.swing.JTextField;
 import modelo.Registro;
 
-/**
- *
- * @author ycgc
- */
 public class VistaRegistro extends javax.swing.JFrame {
 
     private ControladorVistaRegistro controlador;

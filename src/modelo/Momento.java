@@ -7,6 +7,7 @@ package modelo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -23,6 +24,11 @@ public class Momento {
         moment = d;
     }
     
+    public Momento(GregorianCalendar gc){
+        moment = gc.getGregorianChange();
+    }
+    
+    @Override
     public String toString(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(moment);

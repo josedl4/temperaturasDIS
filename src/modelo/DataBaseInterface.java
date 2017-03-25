@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 /**
@@ -35,7 +36,7 @@ public class DataBaseInterface {
             String passwd = "root";
             conn = DriverManager.getConnection(url+dbName, userName, passwd);
             stat = conn.createStatement();
-            stat.execute("CREATE TABLE temperaturas (temperatura real not null, momento date not null, primary key(temperatura, momento))");            
+            stat.execute("CREATE TABLE temperaturas (temperatura real not null, momento timestamp not null, primary key(momento))");            
             
         } catch (SQLException ex) {
             System.out.println("Err");
@@ -57,7 +58,8 @@ public class DataBaseInterface {
         ResultSet query = stat.executeQuery("SELECT * FROM temperaturas");
         while(query.next()){
             float temp = (float) query.getObject(1);
-            Date d = (Date) query.getObject(2);
+            Timestamp stamp = (Timestamp) query.getObject(2);
+            Date d = new Date(stamp.getTime());
             Momento m = new Momento(d);
             result.put( m, new Temperatura(temp));
         }

@@ -9,19 +9,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author ycgc
  */
-public class Registro {
+public class Registro extends Observable{
     
     private String nombre;
     private Momento fechaInicio;
     private ArrayList<Temperatura> listaTemperaturas;
     private HashMap<Momento,Temperatura> mapa;
     private Temperatura temperaturaMinima, temperaturaMaxima;
-    private DataBaseInterface db;
+    private final DataBaseInterface db;
     
     private static Registro registro;
 
@@ -30,7 +32,7 @@ public class Registro {
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
         listaTemperaturas = new ArrayList<>();
-        mapa = new HashMap<>();
+        mapa = new HashMap<Momento, Temperatura>();
         
         loadTemperatures();
     }
@@ -91,6 +93,10 @@ public class Registro {
         return temperaturaMaxima;
     }
     
+    public HashMap<Momento, Temperatura> getRegisterData(){
+        return mapa;
+    }
+    
     public void addTemperatura(Temperatura nuevaTemperatura, Momento moment){
         if (listaTemperaturas.isEmpty()) {
             temperaturaMinima = nuevaTemperatura;
@@ -109,6 +115,11 @@ public class Registro {
         if (nuevaTemperatura.getValor() > temperaturaMaxima.getValor()) {
             temperaturaMaxima = nuevaTemperatura;
         }
+        setChanged();
+        if(countObservers() != 0)
+            synchronized(this){
+                notifyObservers();
+            }
     }
     
     private void loadTemperatures(){
@@ -130,6 +141,11 @@ public class Registro {
         } catch (Exception e) {
             System.err.println(e);
         }
+        setChanged();
+        if(countObservers() != 0)
+            synchronized(this){
+                notifyObservers();
+            }
     }
     
     private void updateTemperature(Momento moment,float temp){
@@ -138,6 +154,6 @@ public class Registro {
         } catch (SQLException ex) {
             System.err.println(ex);
         }
-    }
-    
+    }    
+
 }

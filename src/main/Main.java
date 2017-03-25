@@ -7,10 +7,12 @@ package main;
 
 import interfazUsuario.VistaRegistro;
 import interfazUsuario.VistaTemperaturas;
+import interfazUsuario.VistaViewerDB;
 
 public class Main {
     
     private static VistaRegistro vista;
+    private static VistaViewerDB viewerDB;
 
     /**
      * @param args the command line arguments
@@ -42,10 +44,20 @@ public class Main {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                viewerDB = new VistaViewerDB();
+                viewerDB.setLocationRelativeTo(null);
+                viewerDB.setVisible(true);
+            }
+        });
+        
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
                 vista = new VistaRegistro();
                 vista.setLocationRelativeTo(null);
                 vista.setVisible(true);
             }
         });
+        
     }
 }
